@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:sockets="http://www.mulesoft.org/schema/mule/sockets"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/sockets http://www.mulesoft.org/schema/mule/sockets/current/mule-sockets.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd">
+	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="23318ede-3769-4975-9117-dfe78a1e41c1" >
+		<http:listener-connection host="0.0.0.0" port="8081" />
+	</http:listener-config>
+	<flow name="lengthcounterapiFlow" doc:id="25894883-b22b-45f7-972f-65cebd601c50" >
+		<http:listener doc:name="Listener" doc:id="cc1eef75-a27d-4f75-9103-b87d90d2b45a" config-ref="HTTP_Listener_config" path="/keyLength"/>
+		<flow-ref doc:name="Flow Reference" doc:id="851aa110-bd3f-442f-97fb-d579e49660eb" name="lengthcounterapiSub_Flow"/>
+		<set-payload value='#[payload]' doc:name="Set Payload" doc:id="e358092f-4848-4993-ad68-a9302263ec58" />
+		<logger level="INFO" doc:name="Logger" doc:id="3d3280d5-98fe-4e07-a34d-47e55081861b" message='#[payload]'/>
+	</flow>
+	<sub-flow name="lengthcounterapiSub_Flow" doc:id="5b4af859-84c5-41b6-a8db-0356c646200c" >
+		<set-payload value="#[sizeOf(payload.key)]" doc:name="lengthCounter" doc:id="778fb905-f7af-4244-8b4f-40e66d51b071" />
+		<logger level="INFO" doc:name="Logger" doc:id="a3670251-e48b-4b3c-939c-279525310ca5" message='#["length": sizeOf(payload.key)]'/>
+	</sub-flow>
+</mule>
